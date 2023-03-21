@@ -1,0 +1,56 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 120%;
+}
+#container {
+    display: flex;
+    height: 100%;
+    --start-display: flex;
+    --redGreen-display: none;
+    --redGreen-background: green;
+}
+
+#start {
+    display: var(--start-display);
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+#startButton {
+    font-size: xx-large;
+}
+
+#redGreen {
+    display: var(--redGreen-display);
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    background: var(--redGreen-background);
+}
+#redGreen .timeNow {
+    font-size: 3em;
+    font-weight: bold;
+}
+#redGreen .timeNow .seconds {
+    font-size: 0.5em;
+}
+#redGreen .totals {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2em;
+}
+#redGreen .totals > div {
+    padding: 0 5px;
+    border-radius: 5px;
+}
+#redGreen .totals .green {
+    background: green;
+}
+#redGreen .totals .red {
+    background: red;
+}
