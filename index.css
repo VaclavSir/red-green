@@ -31,11 +31,11 @@ html, body {
     align-items: center;
     background: var(--redGreen-background);
 }
-#redGreen .timeNow {
+#timeNow {
     font-size: 3em;
     font-weight: bold;
 }
-#redGreen .timeNow .seconds {
+#timeNow .seconds {
     font-size: 0.5em;
 }
 #redGreen .totals {

@@ -17,7 +17,7 @@
 
         <div id="redGreen">
             <div>
-                <div class="timeNow">00:00<span class="seconds">:01</span></div>
+                <div id="timeNow">00:00<span class="seconds">:01</span></div>
                 <div class="totals">
                     <div class="green">00:00:02</div>
                     <div class="red">00:00:03</div>
@@ -27,19 +27,94 @@
     </div>
     <script>
         const container = document.getElementById('container');
+        const timeNow = document.getElementById('timeNow');
+        const totalGreen = document.querySelector('.totals .green');
+        const totalRed = document.querySelector('.totals .red');
+
+        const state = {
+            screen: 'start',
+            runningTimeStart: null,
+            totals: {
+                green: 0,
+                red: 0,
+            }
+        }
+        function renderScreen() {
+            switch (state.screen) {
+                case 'start':
+                    container.style.setProperty('--start-display', 'flex');
+                    container.style.setProperty('--redGreen-display', 'none');
+                    break;
+                case 'red':
+                    container.style.setProperty('--start-display', 'none');
+                    container.style.setProperty('--redGreen-display', 'flex');
+                    container.style.setProperty('--redGreen-background', 'red');
+                    break;
+                case 'green':
+                    container.style.setProperty('--start-display', 'none');
+                    container.style.setProperty('--redGreen-display', 'flex');
+                    container.style.setProperty('--redGreen-background', 'green');
+                    break;
+            }
+            renderTime();
+        }
+
+        function decaySeconds(seconds) {
+            return {
+                hours: String(Math.floor(seconds / 60 / 60)),
+                minutes: String(Math.floor(seconds / 60) % 60).padStart(2, '0'),
+                seconds: String(Math.floor(seconds) % 60).padStart(2, '0')
+            };
+        }
+
+        function formatTime(timeInSeconds) {
+            const {hours, minutes, seconds} = decaySeconds(timeInSeconds);
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function dateNowSeconds() {
+            return Math.floor(Date.now() / 1000);
+        }
+
+        function renderTime() {
+            const nowDiff = dateNowSeconds() - state.runningTimeStart;
+            const { hours, minutes, seconds } = decaySeconds(nowDiff);
+            timeNow.innerHTML = `${hours}:${minutes}<span class="seconds">:${seconds}</span>`;
+
+            if (state.screen === 'green') {
+                totalGreen.innerHTML = formatTime(state.totals.green + nowDiff);
+                totalRed.innerHTML = formatTime(state.totals.red);
+            } else if (state.screen === 'red') {
+                totalGreen.innerHTML = formatTime(state.totals.green);
+                totalRed.innerHTML = formatTime(state.totals.red + nowDiff);
+            }
+        }
+        setInterval(renderTime, 200);
+
         const startButton = document.getElementById('startButton');
         startButton.addEventListener('click', () => {
-            container.style.setProperty('--start-display', 'none');
-            container.style.setProperty('--redGreen-display', 'flex');
+            state.screen = 'green';
+            state.runningTimeStart = dateNowSeconds();
+            renderScreen();
         });
 
         const redGreen = document.getElementById('redGreen');
         SwipeListener(redGreen);
         redGreen.addEventListener('swipe', (e) => {
             if (e.detail.directions.left || e.detail.directions.right) {
-                const currentColor = container.style.getPropertyValue('--redGreen-background');
-                const newColor = currentColor === 'red' ? 'green' : 'red';
-                container.style.setProperty('--redGreen-background', newColor);
+                const currentTime = dateNowSeconds();
+                switch (state.screen) {
+                    case 'green':
+                        state.screen = 'red';
+                        state.totals.green += currentTime - state.runningTimeStart;
+                        break;
+                    case 'red':
+                        state.screen = 'green';
+                        state.totals.red += currentTime - state.runningTimeStart;
+                        break;
+                }
+                state.runningTimeStart = currentTime;
+                renderScreen();
             }
         });
     </script>
