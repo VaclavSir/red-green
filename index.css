@@ -12,6 +12,8 @@ html, body {
     --start-display: flex;
     --redGreen-display: none;
     --redGreen-background: green;
+    --percent-green: 0%;
+    --percent-red: 0%;
 }
 
 #start {
@@ -55,4 +57,32 @@ html, body {
 }
 #redGreen .totals .red {
     background: red;
+}
+
+#percents {
+    position: relative;
+    margin-top: 2em;
+    font-size: 50%;
+}
+#percents .greenText {
+    position: absolute;
+    opacity: 0.5;
+}
+#percents .redText {
+    position: absolute;
+    right: 0;
+    opacity: 0.5;
+}
+#percents .greenBar {
+    position: absolute;
+    background: green;
+    width: var(--percent-green);
+    height: 1em;
+}
+#percents .redBar {
+    position: absolute;
+    right: 0;
+    background: red;
+    width: var(--percent-red);
+    height: 1em;
 }

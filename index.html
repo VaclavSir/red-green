@@ -22,6 +22,12 @@
                     <div class="green">00:00:02</div>
                     <div class="red">00:00:03</div>
                 </div>
+                <div id="percents">
+                    <div class="greenBar"></div>
+                    <div class="redBar"></div>
+                    <div class="greenText">0%</div>
+                    <div class="redText">0%</div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,6 +36,8 @@
         const timeNow = document.getElementById('timeNow');
         const totalGreen = document.querySelector('.totals .green');
         const totalRed = document.querySelector('.totals .red');
+        const greenPercent = document.querySelector('#percents .greenText');
+        const redPercent = document.querySelector('#percents .redText');
 
         const state = {
             screen: 'start',
@@ -78,16 +86,24 @@
 
         function renderTime() {
             const nowDiff = dateNowSeconds() - state.runningTimeStart;
+
+            // Render "time now"
             const { hours, minutes, seconds } = decaySeconds(nowDiff);
             timeNow.innerHTML = `${hours}:${minutes}<span class="seconds">:${seconds}</span>`;
 
-            if (state.screen === 'green') {
-                totalGreen.innerHTML = formatTime(state.totals.green + nowDiff);
-                totalRed.innerHTML = formatTime(state.totals.red);
-            } else if (state.screen === 'red') {
-                totalGreen.innerHTML = formatTime(state.totals.green);
-                totalRed.innerHTML = formatTime(state.totals.red + nowDiff);
-            }
+            // Render totals and percents
+            const totalGreenSecs = state.screen === 'green' ? state.totals.green + nowDiff : state.totals.green;
+            const totalRedSecs = state.screen === 'red' ? state.totals.red + nowDiff : state.totals.red;
+            const greenPercentValue = (totalGreenSecs + totalRedSecs > 0)
+                ? Math.floor(totalGreenSecs / (totalGreenSecs + totalRedSecs) * 100)
+                : 100;
+            const redPercentValue = 100 - greenPercentValue;
+            totalGreen.innerHTML = formatTime(totalGreenSecs);
+            totalRed.innerHTML = formatTime(totalRedSecs);
+            greenPercent.innerHTML = `${greenPercentValue}%`;
+            redPercent.innerHTML = `${redPercentValue}%`;
+            container.style.setProperty('--percent-green', `${greenPercentValue}%`);
+            container.style.setProperty('--percent-red', `${redPercentValue}%`);
         }
         setInterval(renderTime, 200);
 
