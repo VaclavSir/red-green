@@ -4,6 +4,7 @@ html, body {
     padding: 0;
     font-family: sans-serif;
     font-size: 120%;
+    color: white;
 }
 #container {
     display: flex;
@@ -34,6 +35,7 @@ html, body {
 #timeNow {
     font-size: 3em;
     font-weight: bold;
+    text-align: center;
 }
 #timeNow .seconds {
     font-size: 0.5em;
@@ -45,7 +47,7 @@ html, body {
     margin-top: 2em;
 }
 #redGreen .totals > div {
-    padding: 0 5px;
+    padding: 3px 7px;
     border-radius: 5px;
 }
 #redGreen .totals .green {
