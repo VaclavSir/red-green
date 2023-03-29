@@ -45,23 +45,45 @@
             totals: {
                 green: 0,
                 red: 0,
+            },
+            wakeLock: null,
+        }
+
+        async function requestWakeLock() {
+            if (state.wakeLock === null) {
+                try {
+                    state.wakeLock = await navigator.wakeLock.request('screen');
+                } catch (error) {}
             }
         }
+
+        async function releaseWakeLock() {
+            if (state.wakeLock !== null) {
+                try {
+                    await state.wakeLock.release();
+                    state.wakeLock = null;
+                } catch (error) {}
+            }
+        }
+
         function renderScreen() {
             switch (state.screen) {
                 case 'start':
                     container.style.setProperty('--start-display', 'flex');
                     container.style.setProperty('--redGreen-display', 'none');
+                    releaseWakeLock();
                     break;
                 case 'red':
                     container.style.setProperty('--start-display', 'none');
                     container.style.setProperty('--redGreen-display', 'flex');
                     container.style.setProperty('--redGreen-background', 'red');
+                    requestWakeLock();
                     break;
                 case 'green':
                     container.style.setProperty('--start-display', 'none');
                     container.style.setProperty('--redGreen-display', 'flex');
                     container.style.setProperty('--redGreen-background', 'green');
+                    requestWakeLock();
                     break;
             }
             renderTime();
