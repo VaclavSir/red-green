@@ -56,7 +56,7 @@
         }
 
         async function requestWakeLock() {
-            if (state.wakeLock === null) {
+            if (state.wakeLock === null || state.wakeLock.released) {
                 try {
                     state.wakeLock = await navigator.wakeLock.request('screen');
                 } catch (error) {}
