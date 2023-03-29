@@ -19,11 +19,16 @@ html, body {
 #start {
     display: var(--start-display);
     flex-grow: 1;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 #startButton {
     font-size: xx-large;
+}
+#settingsButton {
+    font-size: x-large;
+    margin-top: 1em;
 }
 
 #redGreen {

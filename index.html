@@ -13,7 +13,13 @@
     <div id="container">
         <div id="start">
             <button id="startButton">Start</button>
+            <button id="settingsButton">Settings</button>
         </div>
+
+        <dialog id="settingsDialog">
+            todo
+            <button id="settingsDialogClose">Close</button>
+        </dialog>
 
         <div id="redGreen">
             <div>
@@ -134,6 +140,16 @@
             state.screen = 'green';
             state.runningTimeStart = dateNowSeconds();
             renderScreen();
+        });
+
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsDialog = document.getElementById('settingsDialog');
+        settingsButton.addEventListener('click', () => {
+            settingsDialog.showModal();
+        });
+        const settingsDialogClose = document.getElementById('settingsDialogClose');
+        settingsDialogClose.addEventListener('click', () => {
+            settingsDialog.close();
         });
 
         const redGreen = document.getElementById('redGreen');
