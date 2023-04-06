@@ -63,6 +63,24 @@ html, body {
 #redGreen .totals .red {
     background: red;
 }
+#redGreenMenuButton {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    background: var(--redGreen-background);
+    border-color: white;
+    color: white;
+}
+#redGreenMenu {
+    background: lightgray;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+#redGreenMenu > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
 
 #percents {
     position: relative;

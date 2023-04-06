@@ -35,6 +35,14 @@
                     <div class="redText">0%</div>
                 </div>
             </div>
+            <button id="redGreenMenuButton">Menu</button>
+            <dialog id="redGreenMenu">
+                <div>
+                    <button id="toggleFullscreenButton">Toggle fullscreen</button>
+                    <button id="stopButton">Stop session</button>
+                    <button id="closeMenuButton">Close this menu</button>
+                </div>
+            </dialog>
         </div>
     </div>
     <script>
@@ -170,6 +178,45 @@
                 state.runningTimeStart = currentTime;
                 renderScreen();
             }
+        });
+
+        const redGreenMenu = document.getElementById('redGreenMenu');
+        const redGreenMenuButton = document.getElementById('redGreenMenuButton');
+        redGreenMenuButton.addEventListener('click', () => {
+            redGreenMenu.showModal();
+        });
+        const toggleFullscreenButton = document.getElementById('toggleFullscreenButton');
+        toggleFullscreenButton.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                document.documentElement.requestFullscreen();
+            }
+            redGreenMenu.close();
+        });
+        const stopButton = document.getElementById('stopButton');
+        stopButton.addEventListener('click', () => {
+            releaseWakeLock();
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+            const currentTime = dateNowSeconds();
+            switch (state.screen) {
+                case 'green':
+                    state.totals.green += currentTime - state.runningTimeStart;
+                    break;
+                case 'red':
+                    state.totals.red += currentTime - state.runningTimeStart;
+                    break;
+            }
+            state.runningTimeStart = null;
+            state.screen = 'start';
+            renderScreen();
+            redGreenMenu.close();
+        });
+        const closeMenuButton = document.getElementById('closeMenuButton');
+        closeMenuButton.addEventListener('click', () => {
+            redGreenMenu.close();
         });
     </script>
 </body>
